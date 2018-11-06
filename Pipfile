@@ -1,0 +1,26 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+Flask-WTF = "*"
+Flask-SQLAlchemy = "*"
+Flask-Migrate = "*"
+WTForms-Alchemy = "*"
+SQLAlchemy-Utils = "*"
+python-dotenv = "*"
+
+[dev-packages]
+tox = "*"
+tox-pipenv = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-flask = "*"
+pytest-xdist = "*"
+flake8 = "*"
+pep8-naming = "*"
+
+[requires]
+python_version = "3"

@@ -1,0 +1,40 @@
+syntax: glob
+
+*~
+*.py[cod]
+*.{orig,rej}
+*.db
+
+# Arquivos de backup do Mercurial
+*.orig
+*.rej
+
+# Editor files
+.vscode
+
+# Logs
+logs
+*.log
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+bin
+sdist
+develop-eggs
+lib
+
+# instance configuration
+instance/
+.env
+
+# Unit test / coverage reports
+.pytest_cache
+.cache
+.coverage
+.coverage.*
+.tox
+
