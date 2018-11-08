@@ -3,7 +3,7 @@ from binascii import hexlify
 from pathlib import Path
 
 
-basedir = Path(__file__).resolve()
+basedir = Path(__file__).parent
 
 
 class Config:
@@ -33,7 +33,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        Path('sqlite:///') / basedir / 'olist.db'
+        'sqlite:///' + str(basedir / 'olist.db')
 
 
 class TestingConfig(Config):
@@ -46,7 +46,7 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        Path('sqlite:///') / basedir / 'olist.db'
+        'sqlite:///' + str(basedir / 'olist.db')
 
     @classmethod
     def init_app(cls, app):
