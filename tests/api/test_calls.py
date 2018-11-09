@@ -1,7 +1,7 @@
 import pytest
 from datetime import datetime, timedelta
 from app.models import Call
-from app.api.schemas import calls_schema
+from app.api.schemas import call_schema, calls_schema
 
 
 @pytest.fixture
@@ -20,3 +20,11 @@ def test_calls_get(client, populate):
     assert response.status_code == 200
     assert len(response.json) == 3
     assert calls_schema.dump(Call.query.all()) == response.json
+
+
+def test_iso8601_timestamp(db):
+    c = Call.create(id=1, call_id=1, source='12345678901', destination='123456789',
+                    timestamp=datetime(2018, 11, 9, 18, 36, 00), type='start')
+    json = call_schema.dump(c)
+
+    assert json['timestamp'] == '2018-11-09T18:36:00Z'
