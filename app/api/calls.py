@@ -7,7 +7,7 @@ from .schemas import calls_schema
 
 class Calls(Resource):
     def get(self):
-        records = calls_schema.dump(CallRecord.query.all()).data
+        records = calls_schema.dump(CallRecord.query.all())
         return jsonify(records)
 
     def post(self):

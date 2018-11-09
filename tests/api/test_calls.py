@@ -19,4 +19,4 @@ def test_calls_get(client, populate):
 
     assert response.status_code == 200
     assert len(response.json) == 3
-    assert calls_schema.dump(Call.query.all()).data == response.json
+    assert calls_schema.dump(Call.query.all()) == response.json

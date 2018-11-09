@@ -14,6 +14,7 @@ python-dotenv = "*"
 flask-restful = "*"
 flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
+marshmallow = "*"
 
 [dev-packages]
 pytest = "*"
@@ -25,3 +26,6 @@ pep8-naming = "*"
 
 [requires]
 python_version = "3"
+
+[pipenv]
+allow_prereleases = true
