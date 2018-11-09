@@ -1,29 +1,30 @@
 from flask import jsonify
-from flask_restful import Resource
-from . import api, api_rest  # noqa: F401
-from ..models import Call as CallRecord
+from . import api
+from ..models import Call
 from .schemas import calls_schema
 
 
-class Calls(Resource):
-    def get(self):
-        records = calls_schema.dump(CallRecord.query.all())
-        return jsonify(records)
-
-    def post(self):
-        pass
+@api.route('/calls', methods=['GET'])
+def get_calls():
+    records = calls_schema.dump(Call.query.all())
+    return jsonify(records)
 
 
-class Call(Resource):
-    def get(self, id):
-        pass
-
-    def delete(self, id):
-        pass
-
-    def put(self, id):
-        pass
+@api.route('/calls', methods=['POST'])
+def post_call():
+    pass
 
 
-api_rest.add_resource(Calls, '/calls')
-api_rest.add_resource(Call, '/calls/<int:id>')
+@api.route('/calls/<int:id>', methods=['GET'])
+def get_call(id):
+    pass
+
+
+@api.route('/calls/<int:id>', methods=['PUT'])
+def put_call(id):
+    pass
+
+
+@api.route('/calls/<int:id>', methods=['DELETE'])
+def delete_call(id):
+    pass
