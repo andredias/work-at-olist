@@ -1,16 +1,14 @@
 from . import db
 from .mixins import CRUDMixin
-from sqlalchemy import Column, TIMESTAMP as Timestamp, String, Integer
+from sqlalchemy import Column, TIMESTAMP as Timestamp, String, Integer  # noqa: N811
 from sqlalchemy_utils import force_auto_coercion
 
 force_auto_coercion()
 
 
 class Call(CRUDMixin, db.Model):
-    call_id = Column(Integer)
-    start_id = Column(Integer, unique=True)
-    end_id = Column(Integer, unique=True)
+    type = Column(String(5), nullable=False)
+    call_id = Column(Integer, nullable=False)
     source = Column(String(11))
     destination = Column(String(11))
-    start_timestamp = Column(Timestamp)
-    end_timestamp = Column(Timestamp)
+    timestamp = Column(Timestamp, nullable=False)
