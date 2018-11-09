@@ -11,10 +11,11 @@ Flask-Migrate = "*"
 WTForms-Alchemy = "*"
 SQLAlchemy-Utils = "*"
 python-dotenv = "*"
+flask-restful = "*"
+flask-marshmallow = "*"
+marshmallow-sqlalchemy = "*"
 
 [dev-packages]
-tox = "*"
-tox-pipenv = "*"
 pytest = "*"
 pytest-cov = "*"
 pytest-flask = "*"
