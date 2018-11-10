@@ -1,3 +1,4 @@
+import json
 import pytest
 from datetime import datetime, timedelta
 from app.models import Call
@@ -28,3 +29,48 @@ def test_iso8601_timestamp(db):
     json = call_schema.dump(c)
 
     assert json['timestamp'] == '2018-11-09T18:36:00Z'
+
+
+def test_create_call_1(client, db):
+    data = {
+        'id': 1,
+        'call_id': 1,
+        'destination': '123456789',
+        'source': '12345678901',
+        'timestamp': '2018-11-09T21:45:25Z',
+        'type': 'start',
+    }
+    resp = client.post('/api/v1/calls', data=json.dumps(data),
+                       content_type='application/json')
+
+    assert resp.status_code == 201
+    assert b'{"call":"/api/v1/calls/1"}\n' in resp.data
+    call = Call.get_by_id(1)
+    assert call
+    assert call.timestamp == datetime(2018, 11, 9, 21, 45, 25)
+
+    data['timestamp'] = '2018-11-09T21:54:00Z'
+    resp = client.post('/api/v1/calls', data=json.dumps(data),
+                       content_type='application/json')
+    assert resp.status_code == 409
+
+
+def test_create_invalid_call(client, db):
+    data = {
+        'id': 1,
+        'call_id': 1,
+        'destination': '123456789',
+        'source': '12345678901',
+        'timestamp': 'invalid',
+        'type': 'start',
+    }
+    data['timestamp'] = 'invalid datetime'
+    resp = client.post('/api/v1/calls', data=json.dumps(data),
+                       content_type='application/json')
+    assert resp.status_code == 422
+
+
+def test_create_empty_call(client, db):
+    resp = client.post('/api/v1/calls', data='{}',
+                       content_type='application/json')
+    assert resp == 400
