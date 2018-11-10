@@ -33,8 +33,17 @@ def get_call(id):
 
 
 @api.route('/calls/<int:id>', methods=['PUT'])
-def put_call(id):
-    pass
+def update_call(id):
+    data = request.json
+    if not data:
+        return jsonify({'message': 'No input data provided'}), 400
+    try:
+        call = call_schema.load(data)
+    except ValidationError as error:
+        return jsonify(error.messages), 422
+    Call.query.get_or_404(call.id)
+    call.save()
+    return jsonify({'message': 'Success'})
 
 
 @api.route('/calls/<int:id>', methods=['DELETE'])

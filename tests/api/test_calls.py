@@ -76,9 +76,7 @@ def test_create_empty_call(client, db):
     assert resp == 400
 
 
-def test_get_start_call(client, db):
-    Call.create(id=1, call_id=1, source='12345678901', destination='123456789',
-                timestamp=datetime.now(), type='start')
+def test_get_start_call(client, populate):
     resp = client.get('/api/v1/calls/1')
 
     assert resp.status_code == 200
@@ -86,9 +84,8 @@ def test_get_start_call(client, db):
     assert data and data['source'] and data['destination']
 
 
-def test_get_end_call(client, db):
-    Call.create(id=1, call_id=1, timestamp=datetime.now(), type='end')
-    resp = client.get('/api/v1/calls/1')
+def test_get_end_call(client, populate):
+    resp = client.get('/api/v1/calls/2')
 
     assert resp.status_code == 200
     data = json.loads(resp.data.decode('utf-8'))
@@ -99,3 +96,55 @@ def test_inexistent_call(client, db):
     resp = client.get('/api/v1/calls/10')
 
     assert resp.status_code == 404
+
+
+def test_update_call(client, populate):
+    data = {
+        'id': 1,
+        'call_id': 1,
+        'destination': '234567890',
+        'source': '12345678901',
+        'timestamp': '2018-11-09T23:16:00Z',
+        'type': 'start',
+    }
+    resp = client.put('/api/v1/calls/1', data=json.dumps(data),
+                      content_type='application/json')
+
+    assert resp.status_code == 200
+    call = Call.get_by_id(1)
+    assert call.timestamp == datetime(2018, 11, 9, 23, 16, 00)
+    assert call.destination == '234567890'
+
+
+def test_update_empty_call(client, populate):
+    resp = client.put('/api/v1/calls/1', data='{}', content_type='application/json')
+    assert resp.status_code == 400
+
+
+def test_update_inexistent_call(client, populate):
+    data = {
+        'id': 100,
+        'call_id': 1,
+        'destination': '234567890',
+        'source': '12345678901',
+        'timestamp': '2018-11-09T23:16:00Z',
+        'type': 'start',
+    }
+    resp = client.put('/api/v1/calls/100', data=json.dumps(data),
+                      content_type='application/json')
+
+    assert resp.status_code == 404
+
+
+def test_update_call_with_invalid_data(client, populate):
+    data = {
+        'id': 2,
+        'call_id': None,
+        'destination': '234567890',
+        'source': '12345678901',
+        'timestamp': '2018xyk00Z',
+        'type': 'start',
+    }
+    resp = client.put('/api/v1/calls/2', data=json.dumps(data),
+                      content_type='application/json')
+    assert resp.status_code == 422
