@@ -28,7 +28,8 @@ def create_call():
 
 @api.route('/calls/<int:id>', methods=['GET'])
 def get_call(id):
-    pass
+    call = Call.query.get_or_404(id)
+    return jsonify(call_schema.dump(call))
 
 
 @api.route('/calls/<int:id>', methods=['PUT'])

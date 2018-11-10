@@ -13,6 +13,9 @@ class CallSchema(ma.ModelSchema):
     @post_dump
     def mk_iso8601_timestamp(self, data):
         data['timestamp'] = data['timestamp'][:19] + 'Z'
+        if data['type'] == 'end':
+            del data['source']
+            del data['destination']
         return data
 
 

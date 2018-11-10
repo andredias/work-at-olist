@@ -74,3 +74,28 @@ def test_create_empty_call(client, db):
     resp = client.post('/api/v1/calls', data='{}',
                        content_type='application/json')
     assert resp == 400
+
+
+def test_get_start_call(client, db):
+    Call.create(id=1, call_id=1, source='12345678901', destination='123456789',
+                timestamp=datetime.now(), type='start')
+    resp = client.get('/api/v1/calls/1')
+
+    assert resp.status_code == 200
+    data = json.loads(resp.data.decode('utf-8'))
+    assert data and data['source'] and data['destination']
+
+
+def test_get_end_call(client, db):
+    Call.create(id=1, call_id=1, timestamp=datetime.now(), type='end')
+    resp = client.get('/api/v1/calls/1')
+
+    assert resp.status_code == 200
+    data = json.loads(resp.data.decode('utf-8'))
+    assert data and 'source' not in data and 'destination' not in data
+
+
+def test_inexistent_call(client, db):
+    resp = client.get('/api/v1/calls/10')
+
+    assert resp.status_code == 404
