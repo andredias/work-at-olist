@@ -148,3 +148,13 @@ def test_update_call_with_invalid_data(client, populate):
     resp = client.put('/api/v1/calls/2', data=json.dumps(data),
                       content_type='application/json')
     assert resp.status_code == 422
+
+
+def test_delete_call(client, populate):
+    resp = client.delete('/api/v1/calls/2')
+    assert resp.status_code == 200
+
+
+def test_delete_inexistent_call(client, populate):
+    resp = client.delete('/api/v1/calls/20')
+    assert resp.status_code == 404

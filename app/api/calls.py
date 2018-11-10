@@ -48,4 +48,5 @@ def update_call(id):
 
 @api.route('/calls/<int:id>', methods=['DELETE'])
 def delete_call(id):
-    pass
+    Call.query.get_or_404(id).delete()
+    return jsonify({'message': 'Success'})
