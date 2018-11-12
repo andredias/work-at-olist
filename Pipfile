@@ -22,6 +22,7 @@ pytest-flask = "*"
 pytest-xdist = "*"
 flake8 = "*"
 pep8-naming = "*"
+flask-shell-ipython = "*"
 
 [requires]
 python_version = "3"
