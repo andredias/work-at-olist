@@ -1,8 +1,9 @@
-from datetime import timedelta
-from flask import jsonify, request
+from datetime import datetime, timedelta
+from flask import jsonify, request, redirect, url_for
 from marshmallow import ValidationError
+from sqlalchemy import and_
 from . import api
-from .schemas import call_schema
+from .schemas import call_schema, bills_schema
 from ..models import Call
 
 
@@ -76,11 +77,29 @@ def create_call():
     return jsonify({'message': 'Success'})
 
 
-@api.route('/calls/<int:subscriber>', methods=['GET'])
-def get_call(subscriber):
-    pass
+@api.route('/calls/<string:subscriber>', methods=['GET'])
+def redirect_to_get_bill(subscriber):
+    now = datetime.now()
+    year, month = (now.year, now.month - 1) \
+        if now.month > 1 else (now.year - 1, 12)
+    return redirect(url_for('.get_bill', subscriber=subscriber, year=year, month=month))
 
 
-@api.route('/calls/<int:subscriber>/<int:year>/<int:month>', methods=['GET'])
-def update_call(subscriber, year, month):
-    pass
+@api.route('/calls/<string:subscriber>/<int:year>/<int:month>', methods=['GET'])
+def get_bill(subscriber, year, month):
+    ref_date = datetime(year=year, month=month, day=1)
+    next_month = datetime(year=year, month=month + 1, day=1) \
+        if month < 12 else datetime(year=year + 1, month=1, day=1)
+    now = datetime.now()
+    if (year, month) < (now.year, now.month):
+        calls = Call.query.filter(and_(Call.source == subscriber,
+                                       Call.end_timestamp >= ref_date,
+                                       Call.end_timestamp < next_month))\
+                          .order_by(Call.start_timestamp).all()
+    else:
+        calls = []
+    return jsonify({
+        'subscriber': subscriber,
+        'period': f'{year}-{month:02}',
+        'calls': bills_schema.dump(calls)
+    })
