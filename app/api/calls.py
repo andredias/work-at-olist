@@ -78,19 +78,14 @@ def create_call():
 
 
 @api.route('/calls/<string:subscriber>', methods=['GET'])
-def redirect_to_get_bill(subscriber):
-    now = datetime.now()
-    year, month = (now.year, now.month - 1) \
-        if now.month > 1 else (now.year - 1, 12)
-    return redirect(url_for('.get_bill', subscriber=subscriber, year=year, month=month))
-
-
 @api.route('/calls/<string:subscriber>/<int:year>/<int:month>', methods=['GET'])
-def get_bill(subscriber, year, month):
+def get_bill(subscriber, year=None, month=None):
+    now = datetime.now()
+    if not(year and month):
+        year, month = (now.year, now.month - 1) if now.month > 1 else (now.year - 1, 12)
     ref_date = datetime(year=year, month=month, day=1)
     next_month = datetime(year=year, month=month + 1, day=1) \
         if month < 12 else datetime(year=year + 1, month=1, day=1)
-    now = datetime.now()
     if (year, month) < (now.year, now.month):
         calls = Call.query.filter(and_(Call.source == subscriber,
                                        Call.end_timestamp >= ref_date,
