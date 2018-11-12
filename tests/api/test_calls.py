@@ -1,8 +1,7 @@
 import json
 import pytest
 from datetime import datetime, timedelta
-from app.models import Call
-from app.api.calls import calc_price
+from app.models import Call, calc_price
 
 
 def test_calc_price():
@@ -133,8 +132,6 @@ def populate_calls(db):
     now_01 = datetime(now.year, now.month, 1)
     prev_month = previous_month(now)
     prev_prev_month = previous_month(prev_month)
-    charge = 0.36
-    charge_minute = 0.09
     id = 0
 
     # ---- Ligações do mês - 2
@@ -147,7 +144,6 @@ def populate_calls(db):
         destination='1122334455',
         start_timestamp=date,
         end_timestamp=date + timedelta(minutes=20, seconds=15),
-        price=(charge + 10 * charge_minute)
     )
 
     id += 1
@@ -158,7 +154,6 @@ def populate_calls(db):
         destination='87654321',
         start_timestamp=date,
         end_timestamp=date + timedelta(minutes=20, seconds=15),
-        price=(charge + 20 * charge_minute)
     )
 
     id += 1
@@ -169,7 +164,6 @@ def populate_calls(db):
         destination='3344556677',
         start_timestamp=date,
         end_timestamp=date + timedelta(minutes=20, seconds=15),
-        price=(charge + 20 * charge_minute)
     )
 
     # ---- Ligações do mês - 1
@@ -182,7 +176,6 @@ def populate_calls(db):
         destination='2233445566',
         start_timestamp=date,
         end_timestamp=date + timedelta(minutes=45, seconds=15),
-        price=charge
     )
 
     id += 1
@@ -193,7 +186,6 @@ def populate_calls(db):
         destination='2233445566',
         start_timestamp=date,
         end_timestamp=date + timedelta(minutes=20, seconds=15),
-        price=(charge + 10 * charge_minute)
     )
 
     id += 1
@@ -204,7 +196,6 @@ def populate_calls(db):
         destination='7890123456',
         start_timestamp=date,
         end_timestamp=date + timedelta(minutes=30, seconds=15),
-        price=(charge + 30 * charge_minute)
     )
 
     id += 1
@@ -215,7 +206,6 @@ def populate_calls(db):
         destination='3344556677',
         start_timestamp=date,
         end_timestamp=date + timedelta(minutes=20, seconds=15),
-        price=(charge + 20 * charge_minute)
     )
 
     # ---- Ligações do mês
@@ -228,7 +218,6 @@ def populate_calls(db):
         destination='4455667788',
         start_timestamp=date,
         end_timestamp=date + timedelta(minutes=40, seconds=25),
-        price=charge
     )
 
     id += 1
@@ -239,7 +228,6 @@ def populate_calls(db):
         destination='7890123456',
         start_timestamp=date,
         end_timestamp=date + timedelta(minutes=25, seconds=15),
-        price=(charge + 15 * charge_minute)
     )
 
     id += 1
@@ -250,7 +238,6 @@ def populate_calls(db):
         destination='7890123456',
         start_timestamp=date,
         end_timestamp=date + timedelta(minutes=31, seconds=15),
-        price=(charge + 31 * charge_minute)
     )
 
     id += 1
@@ -261,7 +248,6 @@ def populate_calls(db):
         destination='3344556677',
         start_timestamp=date,
         end_timestamp=date + timedelta(minutes=22, seconds=29),
-        price=(charge + 22 * charge_minute)
     )
 
 
