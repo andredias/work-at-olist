@@ -1,11 +1,9 @@
-from marshmallow import Schema, fields, post_load, post_dump
-from .. import ma
-from ..models import Call
+from marshmallow import Schema, fields, post_load, pre_dump
 
 ISO8601 = '%Y-%m-%dT%H:%M:%SZ'
 
 
-class CallSchema(Schema):
+class StartEndCallSchema(Schema):
     id = fields.Integer(required=True, data_key='call_id')
     rec_id = fields.Integer(required=True, data_key='id')
     source = fields.String()
@@ -22,23 +20,45 @@ class CallSchema(Schema):
         return data
 
 
-class BillSchema(ma.ModelSchema):
-    class Meta:
-        model = Call
-
-    @post_dump(pass_original=True)
-    def adjust_data(self, data, original):
-        del data['id']
-        del data['source']
-        data['call_start_date'] = data['start_timestamp'][0:10]
-        data['call_start_time'] = data['start_timestamp'][11:19]
-        duration = str(original.end_timestamp - original.start_timestamp).split(':')
-        data['duration'] = '{}h{}min{}s'.format(*duration)
-        data['price'] = str(original.price)
-        del data['start_timestamp']
-        del data['end_timestamp']
-        return data
+def get_duration(interval):
+    '''
+    calculate duration in hours, minutes and seconds of a timedelta interval
+    '''
+    seconds = interval.total_seconds()
+    reference = 3600
+    duration = []
+    while reference > 0:
+        duration.append(int(seconds // reference))
+        seconds -= duration[-1] * reference
+        reference //= 60
+    return duration
 
 
-call_schema = CallSchema()
-bills_schema = BillSchema(many=True)
+class BillDetailSchema(Schema):
+    call_start_date = fields.Date()
+    call_start_time = fields.Time()
+    duration = fields.String()
+    destination = fields.String()
+    price = fields.Number()
+
+    @pre_dump
+    def adjust_data(self, original):
+        interval = (original.end_timestamp - original.start_timestamp)
+        duration = get_duration(interval)
+        return {
+            'call_start_date': original.start_timestamp.date(),
+            'call_start_time': original.start_timestamp.time(),
+            'duration': '{}h{}min{}s'.format(*duration),
+            'destination': original.destination,
+            'price': original.price
+        }
+
+
+class BillSchema(Schema):
+    subscriber = fields.String()
+    period = fields.String()
+    calls = fields.Nested(BillDetailSchema, many=True)
+
+
+call_rec_schema = StartEndCallSchema()
+bill_details_schema = BillDetailSchema(many=True)

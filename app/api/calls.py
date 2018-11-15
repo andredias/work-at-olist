@@ -3,7 +3,7 @@ from flask import jsonify, request
 from marshmallow import ValidationError
 from sqlalchemy import and_
 from . import api
-from .schemas import call_schema, bills_schema
+from .schemas import call_rec_schema, bill_details_schema
 from ..models import Call
 
 
@@ -13,7 +13,7 @@ def create_call():
     if not data:
         return jsonify({'message': 'No input data provided'}), 400
     try:
-        data = call_schema.load(data)
+        data = call_rec_schema.load(data)
     except ValidationError as error:
         return jsonify(error.messages), 422
     call = Call.get_by_id(data['id'])
@@ -43,5 +43,5 @@ def get_bill(subscriber, year=None, month=None):
     return jsonify({
         'subscriber': subscriber,
         'period': f'{year}-{month:02}',
-        'calls': bills_schema.dump(calls)
+        'calls': bill_details_schema.dump(calls)
     })

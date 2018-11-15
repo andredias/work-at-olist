@@ -264,7 +264,7 @@ def test_get_bill_mes_anterior(client, populate_calls):
         'call_start_time': '12:30:30',
         'destination': '7890123456',
         'duration': '0h30min15s',
-        'price': '3.06'
+        'price': 3.06
     }
 
 
@@ -290,7 +290,7 @@ def test_get_bill_dois_meses_atras(client, populate_calls):
         'call_start_time': '12:30:30',
         'destination': '87654321',
         'duration': '0h20min15s',
-        'price': '2.16'
+        'price': 2.16
     }
 
 
@@ -303,3 +303,24 @@ def test_get_bill_mes_atual(client, populate_calls):
     assert data['subscriber'] == '12345678901'
     assert data['period'] == f'{now.year}-{now.month:02}'
     assert len(data['calls']) == 0
+
+
+def test_get_bill_chamada_de_um_dia(client, db):
+    Call.create(
+        id=1,
+        source='99988526423',
+        destination='9933468278',
+        start_timestamp=datetime(2018, 2, 28, 21, 57, 13),
+        end_timestamp=datetime(2018, 3, 1, 22, 10, 56),
+    )
+    resp = client.get('/api/v1/calls/99988526423/2018/3')
+    data = resp.json
+
+    assert len(data['calls']) == 1
+    assert data['calls'][0] == {
+        'call_start_date': '2018-02-28',
+        'call_start_time': '21:57:13',
+        'destination': '9933468278',
+        'duration': '24h13min43s',
+        'price': 86.94
+    }
