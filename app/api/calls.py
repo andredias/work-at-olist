@@ -9,6 +9,25 @@ from ..models import Call
 
 @api.route('/calls', methods=['POST'])
 def create_call():
+    '''
+    Receive a start/end call record
+    ---
+    description: Receive a start/end call record
+    parameters:
+        - in: body
+          name: start/end call record
+          required: true
+          schema:
+              $ref: '#/definitions/StartEndCall'
+
+    responses:
+        200:
+            description: Success
+        400:
+            description: No input data provided
+        422:
+            description: Validation error
+    '''
     data = request.json
     if not data:
         return jsonify({'message': 'No input data provided'}), 400
@@ -27,6 +46,28 @@ def create_call():
 @api.route('/calls/<string:subscriber>', methods=['GET'])
 @api.route('/calls/<string:subscriber>/<int:year>/<int:month>', methods=['GET'])
 def get_bill(subscriber, year=None, month=None):
+    '''
+    Get the telephone bill
+    ---
+    description: Get the telephone bill
+    parameters:
+        - name: subscriber
+          in: path
+          required: true
+          type: string
+        - in: path
+          name: year
+          type: integer
+        - in: path
+          name: month
+          type: integer
+
+    responses:
+        200:
+            description: Success
+            schema:
+                $ref: '#/definitions/Bill'
+    '''
     now = datetime.now()
     if not(year and month):
         year, month = (now.year, now.month - 1) if now.month > 1 else (now.year - 1, 12)

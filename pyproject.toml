@@ -14,6 +14,8 @@ marshmallow-sqlalchemy = "^0.15.0"
 flask-marshmallow = "^0.9.0"
 marshmallow = {version = "^2.16",allows-prereleases = true}
 sqlalchemy-utils = "^0.33.6"
+apispec = "^0.39.0"
+flasgger = "^0.9.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.10"
