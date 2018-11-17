@@ -1,5 +1,5 @@
 '''
-copiado de https://realpython.com/blog/python/python-web-applications-with-flask-part-ii/
+ref: https://realpython.com/blog/python/python-web-applications-with-flask-part-ii/
 '''
 
 from . import db

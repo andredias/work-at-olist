@@ -11,6 +11,8 @@ class Doc(CRUDMixin, _db.Model):
 
 
 def test_unico(db):
+    assert Doc.get_by_id('x87x') is None
+
     doc1 = Doc.create(name='proposta')
     doc2 = Doc.create(name='manual')
     assert doc1 is not None
