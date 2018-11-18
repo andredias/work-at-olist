@@ -1,0 +1,34 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+Flask-WTF = "*"
+Flask-SQLAlchemy = "*"
+Flask-Migrate = "*"
+WTForms-Alchemy = "*"
+SQLAlchemy-Utils = "*"
+python-dotenv = "*"
+flask-marshmallow = "*"
+marshmallow-sqlalchemy = "*"
+marshmallow = "*"
+flasgger = "*"
+apispec = "==0.39.0 "
+
+[dev-packages]
+pytest = "*"
+pytest-cov = "*"
+pytest-flask = "*"
+pytest-xdist = "*"
+flake8 = "*"
+pep8-naming = "*"
+flask-shell-ipython = "*"
+coveralls = "*"
+
+[requires]
+python_version = "3"
+
+[pipenv]
+allow_prereleases = true
