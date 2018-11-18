@@ -1,15 +1,15 @@
 .PHONY: install run test
 
-SHELL := /bin/bash
 
 install:
 	pip install pipenv
 	pipenv install
 	pipenv install --dev
 
-	echo "SECRET_KEY='$(</dev/urandom tr -dc 'A-Za-z0-9@#$%&_+=!?,.*' | head -c 32)'
-	FLASK_ENV=development
-	FLASK_APP=olist
+	SECRET_KEY=$$(</dev/urandom tr -dc 'A-Za-z0-9@#$%&_+=!?,.*' | head -c 32)
+	echo "SECRET_KEY='$$SECRET_KEY'\n\
+	FLASK_ENV=development\n\
+	FLASK_APP=olist\n\
 	" > .env
 
 	pipenv run flask deploy
