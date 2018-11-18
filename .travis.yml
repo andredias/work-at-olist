@@ -1,22 +1,11 @@
 language: python
 python: 3.6
 
-before_install:
-    - pip install pip -U
-    - curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
-    - source $HOME/.poetry/env
-    - poetry install
-    - |
-        echo "SECRET_KEY='$(</dev/urandom tr -dc 'A-Za-z0-9@#$%&_+=!?,.*' | head -c 16)'
-        FLASK_ENV=development
-        FLASK_APP=olist
-        " > .env
-
 install:
-    - poetry run flask deploy
+    - make install
 
 script:
-    - poetry run pytest --cov-report term-missing --cov app/ -v --disable-warnings
+    - make run
 
 after_success:
     - coveralls
