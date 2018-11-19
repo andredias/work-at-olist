@@ -299,10 +299,8 @@ def test_get_bill_current_month(client, populate_calls):
     resp = client.get(f'/api/v1/calls/12345678901/{now.year}/{now.month}')
     data = resp.json
 
-    assert resp.status_code == 200
-    assert data['subscriber'] == '12345678901'
-    assert data['period'] == f'{now.year}-{now.month:02}'
-    assert len(data['calls']) == 0
+    assert resp.status_code == 204
+    assert data is None
 
 
 def test_get_bill_24h13min_call(client, db):

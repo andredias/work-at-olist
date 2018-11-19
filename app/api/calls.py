@@ -67,6 +67,9 @@ def get_bill(subscriber, year=None, month=None):
             description: Success
             schema:
                 $ref: '#/definitions/Bill'
+
+        204:
+            description: No telephone bill for this period
     '''
     now = datetime.now()
     if not(year and month):
@@ -81,6 +84,8 @@ def get_bill(subscriber, year=None, month=None):
                           .order_by(Call.start_timestamp).all()
     else:
         calls = []
+    if not calls:
+        return '', 204
     return jsonify({
         'subscriber': subscriber,
         'period': f'{year}-{month:02}',
