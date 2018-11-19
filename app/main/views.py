@@ -1,8 +1,8 @@
-from flask import Blueprint
+from flask import Blueprint, redirect, url_for
 
 main = Blueprint('main', __name__)
 
 
 @main.route('/')
 def home():
-    return 'ok'
+    return redirect(url_for('flasgger.apidocs'))
