@@ -251,7 +251,7 @@ def populate_calls(db):
     )
 
 
-def test_get_bill_mes_anterior(client, populate_calls):
+def test_get_bill_previous_month(client, populate_calls):
     date_ref = previous_month(datetime.now())
     resp = client.get(f'/api/v1/calls/12345678901/{date_ref.year}/{date_ref.month}')
 
@@ -276,7 +276,7 @@ def test_get_bill(client, populate_calls):
     assert resp1.data == resp2.data
 
 
-def test_get_bill_dois_meses_atras(client, populate_calls):
+def test_get_bill_two_months_ago(client, populate_calls):
     date_ref = previous_month(previous_month(datetime.now()))
     resp = client.get(f'/api/v1/calls/12345678901/{date_ref.year}/{date_ref.month}')
     data = resp.json
@@ -294,7 +294,7 @@ def test_get_bill_dois_meses_atras(client, populate_calls):
     }
 
 
-def test_get_bill_mes_atual(client, populate_calls):
+def test_get_bill_current_month(client, populate_calls):
     now = datetime.now()
     resp = client.get(f'/api/v1/calls/12345678901/{now.year}/{now.month}')
     data = resp.json
@@ -305,7 +305,7 @@ def test_get_bill_mes_atual(client, populate_calls):
     assert len(data['calls']) == 0
 
 
-def test_get_bill_chamada_de_um_dia(client, db):
+def test_get_bill_24h13min_call(client, db):
     Call.create(
         id=1,
         source='99988526423',
