@@ -7,25 +7,19 @@ if dotenv_path.is_file():
     load_dotenv(str(dotenv_path))
 
 import os  # noqa: E402
-from flask_migrate import Migrate, upgrade  # noqa: E402
 from app import create_app, db  # noqa: E402
 
 app = create_app(os.getenv('FLASK_ENV') or 'default')
-migrate = Migrate(app, db)
 
 
 @app.cli.command()
 def deploy():
     """Run deployment tasks."""
     if 'sqlite://' in app.config['SQLALCHEMY_DATABASE_URI']:
-        # SQLite doesn't handle well with upgrade
         path = Path(app.config['SQLALCHEMY_DATABASE_URI'][10:])
         if path.is_file():
             path.unlink()
-        db.create_all()
-    else:
-        # migrate database to latest revision
-        upgrade()
+    db.create_all()
 
     # insert sample data
     # this is part of olist's original requirements
