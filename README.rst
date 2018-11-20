@@ -162,7 +162,7 @@ Get a Telephone Bill (Specific Period)
 Development Instructions
 ========================
 
-The instructions to install, run and test the project are already described in the file :code:`Makefile`:
+The instructions to install, run and test the project are already described in `Makefile <Makefile>`_.
 
 .. include:: Makefile
     :code: make
