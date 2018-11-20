@@ -1,15 +1,18 @@
+import os
 from pathlib import Path
 from datetime import datetime
 from dotenv import load_dotenv
+from pprint import pformat
 
 dotenv_path = Path(__file__).parent / '.env'
 if dotenv_path.is_file():
     load_dotenv(str(dotenv_path))
 
-import os  # noqa: E402
 from app import create_app, db  # noqa: E402
 
-app = create_app(os.getenv('FLASK_ENV') or 'default')
+app = create_app(os.getenv('FLASK_ENV', 'default'))
+app.logger.debug('DATABASE_URL=' + os.getenv('DATABASE_URL', ''))
+app.logger.debug(pformat(app.config))
 
 
 @app.cli.command()

@@ -12,6 +12,7 @@ swag = Swagger()
 
 def create_app(config_name):
     app = Flask(__name__)
+    app.logger.debug('config_name=' + config_name)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
