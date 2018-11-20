@@ -1,6 +1,6 @@
 from flasgger import APISpec
 from .calls import create_call, get_bill
-from .schemas import StartEndCallSchema, BillSchema, BillDetailSchema
+from .schemas import CallStartEndSchema, BillSchema, BillDetailSchema
 
 
 spec = APISpec(
@@ -18,5 +18,5 @@ spec = APISpec(
     route='/v1/spec',
 )
 
-definitions = [StartEndCallSchema, BillSchema, BillDetailSchema]
+definitions = [CallStartEndSchema, BillSchema, BillDetailSchema]
 paths = [create_call, get_bill]

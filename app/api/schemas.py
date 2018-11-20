@@ -3,7 +3,7 @@ from marshmallow import Schema, fields, post_load, pre_dump
 ISO8601 = '%Y-%m-%dT%H:%M:%SZ'
 
 
-class StartEndCallSchema(Schema):
+class CallStartEndSchema(Schema):
     id = fields.Integer(required=True, data_key='call_id')
     rec_id = fields.Integer(required=True, data_key='id')
     source = fields.String()
@@ -60,5 +60,5 @@ class BillSchema(Schema):
     calls = fields.Nested(BillDetailSchema, many=True)
 
 
-call_rec_schema = StartEndCallSchema()
+call_rec_schema = CallStartEndSchema()
 bill_details_schema = BillDetailSchema(many=True)
