@@ -260,7 +260,7 @@ def test_get_bill_previous_month(client, populate_calls):
     assert data['period'] == f'{date_ref.year}-{date_ref.month:02}'
     assert len(data['calls']) == 3
     assert data['calls'][1] == {
-        'call_start_date': f'{date_ref.year}-{date_ref.month}-02',
+        'call_start_date': f'{date_ref.year}-{date_ref.month:02}-02',
         'call_start_time': '12:30:30',
         'destination': '7890123456',
         'duration': '0h30min15s',
@@ -286,7 +286,7 @@ def test_get_bill_two_months_ago(client, populate_calls):
     assert data['period'] == f'{date_ref.year}-{date_ref.month:02}'
     assert len(data['calls']) == 1
     assert data['calls'][0] == {
-        'call_start_date': '2018-09-16',
+        'call_start_date': f'{date_ref.year}-{date_ref.month:02}-16',
         'call_start_time': '12:30:30',
         'destination': '87654321',
         'duration': '0h20min15s',
