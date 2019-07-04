@@ -99,7 +99,7 @@ Get a Telephone Bill (Specific Period)
 .. code:: bash
 
     curl -i \
-      -X GET https://olist-technical-challenge.herokuapp.com/api/v1/calls/99988526423/2018/3
+      -X GET https://olist-technical-challenge.herokuapp.com/api/v1/calls/99988526423/2017/12
 
     HTTP/1.1 200 OK
     Connection: keep-alive
